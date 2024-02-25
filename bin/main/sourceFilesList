@@ -1,0 +1,16 @@
+java/lesson1/App.java
+java/lesson1/Control/Controller.java
+java/lesson1/Control/iGetModel.java
+java/lesson1/Control/iGetView.java
+java/lesson1/Control/InputData.java
+java/lesson1/Model/Animal.java
+java/lesson1/Model/AnimalList.java
+java/lesson1/Model/Cat.java
+java/lesson1/Model/Dog.java
+java/lesson1/Model/Donkey.java
+java/lesson1/Model/ModelFile.java
+java/lesson1/Model/ModelFile.java
+java/lesson1/Model/Mull.java
+java/lesson1/View/AWTview.java
+java/lesson1/View/Language.java
+java/lesson1/View/View.java
