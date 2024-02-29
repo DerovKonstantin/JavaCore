@@ -95,9 +95,10 @@ public class Program {
     static void aiTurn(){
         int x;
         int y;
-
+        int moveX;
+        int moveY;
         int[] moveAi= new int[2];
-        boolean defenseMove = false;
+        
 
         if (!fieldToString().contains(Character.toString(DOT_AI))){  // если поле не содежит фишку AI
             int tryCount = (fieldSizeX * fieldSizeY)/2; // колличество попыток рондомного определения перспектив хода 
@@ -115,19 +116,16 @@ public class Program {
         }
         
         else {
+            boolean defenseMove = false;
             for (x = 0; x < fieldSizeX; x++){
                 for (y = 0; y < fieldSizeY; y++){
-                    if (field[x][y] == DOT_HUMAN && aiCheckPerspectiveLos(x, y, DOT_HUMAN, WIN_COUNT)[0] > 0) {
-                        moveAi = aiCheckPerspectiveLos(x, y, DOT_HUMAN, WIN_COUNT);
+                    if (defenseMove == false && field[x][y] == DOT_HUMAN && !(aiCheckPerspectiveLos(x, y, DOT_HUMAN, WIN_COUNT)[0] < 0 )) {
+                        field[aiCheckPerspectiveLos(x, y, DOT_HUMAN, WIN_COUNT)[0]][aiCheckPerspectiveLos(x, y, DOT_HUMAN, WIN_COUNT)[1]] = DOT_AI;
                         defenseMove = true;
                     }
                 }
             } 
-            if (defenseMove) {
-                field[moveAi[0]][moveAi[1]] = DOT_AI;
-                System.out.print(moveAi[0] + moveAi[1]);///////////////
-            }
-            else { // рондомного определения перспектив хода
+            if (defenseMove == false) {
                 int tryCount = (fieldSizeX * fieldSizeY)/2; // колличество попыток рондомного определения перспектив хода 
                 do{ // рондомного определения перспектив хода
                     x = random.nextInt(fieldSizeX);
@@ -141,8 +139,7 @@ public class Program {
                 } while (!isCellValid(x, y) || !isCellEmpty(x, y) );
                 field[x][y] = DOT_AI;
             }
-        }
-        
+        } 
     }
 
     /**
@@ -163,35 +160,35 @@ public class Program {
     static int[] aiCheckPerspectiveLos(int x, int y, char DOT_HUMAN, int WIN_COUNT) {
         int[] coord = new int[2];
         // проверка расположения |Х|.|Х|
-        if ( field[x][y + 2] == DOT_HUMAN ) { // y < fieldSizeY-2 && field[x][y + 2] == DOT_HUMAN
+        if ( y < fieldSizeY-2 && field[x][y + 2] == DOT_HUMAN ) { 
             coord[0] = x; coord[1] = y + 1; 
             return coord;
         }
-        if ( field[x + 2][y + 2] == DOT_HUMAN ) { //x < fieldSizeX-2 && y < fieldSizeY-2 && field[x + 2][y + 2] == DOT_HUMAN
+        if ( x < fieldSizeX-2 && y < fieldSizeY-2 && field[x + 2][y + 2] == DOT_HUMAN ) { 
             coord[0] = x + 1; coord[1] = y + 1; 
             return coord;
         }
-        if ( field[x + 2][y] == DOT_HUMAN ) { // x < fieldSizeX-2 && field[x + 2][y] == DOT_HUMAN
+        if ( x < fieldSizeX-2 && field[x + 2][y] == DOT_HUMAN ) { 
             coord[0] = x + 1; coord[1] = y; 
             return coord;
         }
-        if ( field[x + 2][y - 2] == DOT_HUMAN ) { // field[x + 2][y - 2] == DOT_HUMAN
+        if ( x < fieldSizeX-2 && y > 2 && field[x + 2][y - 2] == DOT_HUMAN ) { 
             coord[0] = x + 1; coord[1] = y - 1; 
             return coord;
         }
-        if ( field[x][y - 2] == DOT_HUMAN ) { // y > 2 && field[x][y - 2] == DOT_HUMAN
+        if ( y > 2 && field[x][y - 2] == DOT_HUMAN ) { 
             coord[0] = x; coord[1] = y - 1; 
             return coord;
         }
-        if ( field[x - 2][y - 2] == DOT_HUMAN ) { // x > 2 && y > 2 && field[x - 2][y - 2] == DOT_HUMAN
+        if ( x > 2 && y > 2 && field[x - 2][y - 2] == DOT_HUMAN ) { 
             coord[0] = x - 1; coord[1] = y - 1; 
             return coord;
         }
-        if ( field[x - 2][y] == DOT_HUMAN ) { // x > 2 && field[x - 2][y] == DOT_HUMAN
+        if ( x > 2 && field[x - 2][y] == DOT_HUMAN ) { 
             coord[0] = x - 1; coord[1] = y; 
             return coord;
         }
-        if ( field[x - 2][y + 2] == DOT_HUMAN ) { // x > 2 && y < fieldSizeY-2 && field[x - 2][y + 2] == DOT_HUMAN
+        if ( x > 2 && y < fieldSizeY-2 && field[x - 2][y + 2] == DOT_HUMAN ) { 
             coord[0] = x - 1; coord[1] = y + 1; 
             return coord;
         }
