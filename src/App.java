@@ -80,86 +80,47 @@ public class App {
 //================================================================================================
 
     static void print(File file) throws IOException{
-        //File[] files = file.listFiles();
-        System.out.println(prinFileDirectory(file, ""));
-        
-
+        prinDirectory(file, "", false, true);
     }
 
     /**
      * Метод печатает все файлы коталога используя метод printFile(), добавляет символ "│ " в колличестве зависящем от глуины расположения файла.
      * @param file  - файл.
      */
-    static String prinFileDirectory(File file, String string) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%s", string));
+    static void prinDirectory(File file, String newPartOfString, boolean secondParent, boolean lastInDirectory) throws IOException {
 
-        if (file.isDirectory()) { 
-            sb.append(String.format("%s\n", printFile(file, 0)));
-            if (file.listFiles().length > 0){
+        String string = newPartOfString;
+        System.out.println(String.format("%s%s%s", string, ((lastInDirectory) ? "└─" : "├─"), file.getName()));
+        string = String.format("%s%s", string, ((secondParent) ? "│ " : "  "));
+   
+        if (file.isDirectory()) {
+            if ( file.listFiles().length > 0) {
                 File[] files = file.listFiles();
-                sb.append(String.format("  "));
                 for (int i = 0; i < files.length; i++){
-                    if (file.isDirectory()) {
-                        sb.append(String.format("%s", prinFileDirectory(files[i], sb.toString())));
+                    if (files[i].isDirectory()) {
+                        if (files.length == i+1) {
+                            if (files[i].listFiles().length > 1) {
+                                prinDirectory(files[i], string, false, true);
+                            } else {
+                                prinDirectory(files[i], string, false, true);
+                            }
+                        } else {
+                            if (files[i].listFiles().length > 1) {
+                                prinDirectory(files[i], string, true, false);
+                            } else {
+                                prinDirectory(files[i], string, true, false);
+                            }
+                        }
+                    } else {
+                        if (files.length == i+1) {
+                            prinDirectory(files[i], string, false, true);
+                        } else {
+                            prinDirectory(files[i], string, true, false);
+                        }
                     }
-                    else{
-                        sb.append(String.format("%s", printFile(files[i], i)));
-                    }
-                } 
-            }
+                }
+            } 
         } 
-        else { 
-            sb.append(String.format("%s\n", printFile(file, 0)));
-        }
-        return sb.toString();
     }
-
-    /**
-     * Метод печатает символ "├─" : "└─" и название файла в зависимости от типа.
-     * @param file  - файл.
-     */
-    static String printFile(File file, int i) throws IOException {
-        if (file.getParentFile() == null) {
-            return String.format("%s%s", "└─", file.getName());
-        } else if (file.getParentFile().listFiles().length == i) {
-            return String.format("%s%s", "└─", file.getName());
-        } 
-        boolean isDirectory = file.isDirectory();
-        return String.format("%s%s", ((isDirectory) ? "├─" : "└─"), file.getName());
-    }
-
-    // static String printDirectory(File file, int i) throws IOException {
-    //     if (file.getParentFile() == null) {
-    //         return String.format("%s%s", "└─", file.getName());
-    //     } else if (file.getParentFile().listFiles().length == i) {
-    //         return String.format("%s%s", "└─", file.getName());
-    //     } 
-    //     return String.format("%s%s", "├─", file.getName());
-    // }
-
-    // static String printFile(File file, int i) throws IOException {
-    //     return String.format("%s%s", "└─", file.getName());
-
-    // }
-
-    //=====================================
-
-    // File[] files = file.listFiles();
-    // for (int i = 0; i < files.length; i++){
-    //     // sb.append(String.format("  ", prinFileDirectory(file)));////////////////////////////
-    //     // if (files[i].isDirectory()) {
-    //     //     System.out.println( files[i].listFiles().length +" "+ files[i].toPath().toString());
-    //     //     if (files[i].listFiles().length > 0 ){  
-    //     //         File[] fs = files[i].listFiles();
-    //     //         for (int j = 0; j < fs.length; j++){
-    //     //             if (fs[j].isDirectory()) System.out.println( "    "+ fs[j].toPath().toString());
-    //     //             else System.out.println( "    "+ fs[j].toPath().toString());
-    //     //         }
-    //     //     }
-    //     // } else {
-    //     //     System.out.println( files[i].toPath().toString());
-    //     // }
-    // } 
 
 }
